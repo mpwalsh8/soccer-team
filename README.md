@@ -1,4 +1,4 @@
 soccer-team
 ===========
 
-WordPress plugin to support a youth soccer team.
+Soccer-Team is a plugin to facilitate using WordPress for a soccer team web site.  This plugin defines custom post types for players and teams and custom taxonomies for positions and rosters.  The custom post types and taxonomies allow for a site which has a page and menu structure to highlight each team and player as well as numerous fields which can be enabled that are typically found in player and team profiles.  Soccer-Team is targeted at teams which play under <a href="http://www.ussoccer.com/Teams/Development-Academy/Academy.aspx">US Development Academy</a>, <a href="http://www.eliteclubsnationalleague.com">Elite Clubs National League</a>, and <a href="http://www.usyouthsoccer.org/">US Youth Soccer</a>.  However, the Soccer-Team plugin can be used for any soccer team or club looking to establish a web site based on WordPress.
