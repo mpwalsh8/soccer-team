@@ -1,0 +1,61 @@
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * CSS declarations for Cloud Carousel
+ *
+ * These can be copied and modified to fit the needs of
+ * a theme.  By default the only change is to make all of
+ * the fields wider than their default width and to set the
+ * default font.
+ *
+ * Many of these CSS definitions were derived from the
+ * Cloud Carousel example found at:
+ *
+ * http://www.professorcloud.com/mainsite/carousel.htm
+ */
+
+div#st-player-gallery-carousel {
+    width: 570px;
+    height: 380px;
+    background: url(../images/PlayerGalleryBg.jpg);
+    overflow: scroll;
+}
+
+div#st-pgc-alt, div#st-pgc-title {
+    color: white;
+    font-weight: bold;
+    font-size: 1.8em;
+    padding-left: 10px;
+}
+
+div#st-pgc-alt {
+    font-size: 1.2em;
+}
+
+/****************************************/ 
+
+.st-pgc-left-button {
+    display:none;
+    background:url(../images/carousel/rotate-left.png);
+    width:40px; height:40px;
+    background-position: 0px 0px;
+    position:absolute;top:20px;right:64px;
+}
+
+.st-pgc-left-button:hover {
+    width:40px; height:40px;
+    background-position: 0px 40px;
+    cursor:auto;
+}
+
+.st-pgc-right-button {
+    display:none;
+    background:url(../images/carousel/rotate-right.png);
+    width:40px; height:40px;
+    background-position: 0px 0px;
+    position:absolute;top:20px;right:20px;
+}
+
+.st-pgc-right-button:hover {
+    width:40px; height:40px;
+    background-position: 0px 40px;
+}

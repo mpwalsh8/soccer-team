@@ -1,0 +1,29 @@
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * CSS declarations for the Soccer Team plugin
+ *
+ * These can be copied and modified to fit the needs of
+ * a theme.  By default the only change is to make all of
+ * the fields wider than their default width and to set the
+ * default font.
+ */
+
+.st-players td.st-player-jersey-number {
+    font-size: 1.5em;
+}
+
+.st-players .st-player-jersey-number,
+.st-players .st-player-photo,
+.st-players .st-player-name,
+.st-players .st-player-position,
+.st-players .st-player-profile {
+    text-align: center;
+    vertical-align: middle;
+}
+
+th.st-team-profile-attachment,
+td.st-team-profile-attachment,
+th.st-player-profile-attachment,
+td.st-player-profile-attachment {
+    vertical-align: middle ;
+}
