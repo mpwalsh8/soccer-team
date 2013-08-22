@@ -4,7 +4,7 @@
  * Plugin Name: Soccer Team
  * Plugin URI: http://michaelwalsh.org/wordpress/wordpress-plugins/soccer-team/
  * Description: The Soccer-Team WordPress plugin extend WordPress functionality to facilitate using WordPress for a soccer team web site.  The plugin include custom post types and widgets for team and player profiles, matches, and photo gallerys and more.
- * Version: 0.6-beta-2
+ * Version: 0.6-beta-3
  * Last Modified:  8/21/2013
  * Author: Mike Walsh
  * Author URI: http://www.michaelwalsh.org
@@ -24,7 +24,7 @@
  *
  */
 
-define('ST_VERSION', '0.6-beta-2') ;
+define('ST_VERSION', '0.6-beta-3') ;
 define('ST_PREFIX', 'soccer_team_') ;
 
 require('soccer-team-core.php') ;
