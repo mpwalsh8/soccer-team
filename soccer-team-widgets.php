@@ -20,7 +20,14 @@
  * Gooogle Chart API to generate QR codes
  */
 define('ST_QR_CODE_URL', 'http://chart.apis.google.com/chart?cht=qr&chs=%sx%s&chld=%s|%s&chl=%s') ;
+
+/**
+ * SoccerInCollege.com Team Rank "psuedo" API - it isn't a
+ * real API, data is scrapped using the WordPress HTTP API.
+ */
 define('ST_SINC_TEAM_RANK_URL', 'http://soccerincollege.com/sicMyTeamInfo.aspx?id=%s') ;
+define('ST_SINC_TEAM_RANK_TRANSIENT', ST_PREFIX . '_sinc_team_rank_transient') ;
+define('ST_SINC_TEAM_RANK_TRANSIENT_EXPIRE', 1 * DAY_IN_SECONDS) ;
 
 /**  Output a Player's Profile Custom Fields */
 function soccer_team_team_custom_fields($post_id, $mode = 'full')
@@ -1067,17 +1074,42 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
     {
         $defaults = array(
             'title' => 'SoccerInCollege Ranking',
-            'teamid' => -1
+            'teamid' => -1,
+            'cache' => 'on',
+            'expiration' => 1,
         ) ;
         $instance = wp_parse_args((array) $instance, $defaults) ;
         $title = $instance['title'] ;
         $teamid = empty($instance['teamid']) ? $defaults['teamid'] : $instance['teamid'] ;
+        $cache = $instance['cache'] ;
+        $expiration = $instance['expiration'] ;
 
 ?>
     <p>Title: <input class="widefat" name="<?php echo $this->get_field_name('title') ; ?>"
     type="text" value="<?php echo esc_attr($title) ; ?>" /></p>
 
     <p>Team Id:<input class="widefat" name="<?php echo $this->get_field_name('teamid') ; ?>" type="text" placholder="SINC Team Id" value="<?php echo esc_attr($teamid) ; ?>" /></p>
+
+    <p><label>Cache:</label>
+    <select name="<?php echo $this->get_field_name('cache') ; ?>">
+    <option value="on" <?php selected($cache, 'on') ; ?>>Enabled</option>
+    <option value="off" <?php selected($cache, 'off') ; ?>>Disabled</option>
+    </select>
+    </p>
+
+    <p><label>Cache Expiration:</label>
+    <select name="<?php echo $this->get_field_name('expiration') ; ?>">
+    <option value="1" <?php selected($expiration, 1) ; ?>>1 Day</option>
+    <option value="2" <?php selected($expiration, 2) ; ?>>2 Days</option>
+    <option value="3" <?php selected($expiration, 3) ; ?>>3 Days</option>
+    <option value="4" <?php selected($expiration, 4) ; ?>>4 Days</option>
+    <option value="5" <?php selected($expiration, 5) ; ?>>5 Days</option>
+    <option value="7" <?php selected($expiration, 7) ; ?>>7 Days</option>
+    <option value="10" <?php selected($expiration, 10) ; ?>>10 Days</option>
+    <option value="30" <?php selected($expiration, 30) ; ?>>30 Days</option>
+    </select>
+    </p>
+
 <?php
     }
 
@@ -1092,6 +1124,8 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
         $instance = $old_instance ;
         $instance['title'] = strip_tags($new_instance['title']) ;
         $instance['teamid'] = strip_tags($new_instance['teamid']) ;
+        $instance['cache'] = strip_tags($new_instance['cache']) ;
+        $instance['expiration'] = strip_tags($new_instance['expiration']) ;
 
         return $instance ;
     }
@@ -1106,18 +1140,40 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
     {
         extract($args) ;
 
-        echo $before_widget ;
-        $title = apply_filters('widget_title', $instance['title']) ;
         $teamid = empty($instance['teamid']) ? '&nbsp;' : $instance['teamid'] ;
-
-        if (!empty($title))
-        {
-            echo $before_title . $title . $after_title ;
-        }
+        $cache = empty($instance['cache']) ? 'on' : $instance['cache'] ;
+        $expiration = empty($instance['expiration']) ? 1 : $instance['expiration'] ;
 
         $url = sprintf(ST_SINC_TEAM_RANK_URL, $teamid) ;
 
-        $response= wp_remote_get($url) ;
+        //  Get the team's SINC ranking from the SINC web site if it (a) hasn't
+        //  been retrieved before or (b) the cached content has expired.  The
+        //  ranking doesn't change very often so it can be retrieved once a day.
+
+        if ($cache == 'on' && is_multisite())
+        {
+            if (false === ( $response = get_site_transient( ST_SINC_TEAM_RANK_TRANSIENT . $teamid ) ) ) 
+            {
+                // There was no transient, so let's regenerate the data and save it
+                $response = wp_remote_get($url, array('sslverify' => false, 'timeout' => 10, 'redirection' => 12)) ;
+                set_site_transient( ST_SINC_TEAM_RANK_TRANSIENT . $teamid, $response, $expiration * DAY_IN_SECONDS) ;
+            }
+        }
+        elseif ($cache == 'on' && !is_multisite())
+        {
+            if (false === ( $response = get_transient( ST_SINC_TEAM_RANK_TRANSIENT . $teamid ) ) ) 
+            {
+                // There was no transient, so let's regenerate the data and save it
+                $response = wp_remote_get($url, array('sslverify' => false, 'timeout' => 10, 'redirection' => 12)) ;
+                set_transient( ST_SINC_TEAM_RANK_TRANSIENT . $teamid, $response, $expiration * DAY_IN_SECONDS) ;
+            }
+        }
+        else
+        {
+            $response = wp_remote_get($url, array('sslverify' => false, 'timeout' => 10, 'redirection' => 12)) ;
+        }
+
+        //$response= wp_remote_get($url) ;
 
         if (is_wp_error($response))
         {
@@ -1155,11 +1211,31 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
 
             //  Need to "tweak" the HTML so it references the SINC
             //  URLs correctly since they are relative in the source
+            //  Need to handle "href" in <a> tags and "src" in <img> tags
 
-            $body = preg_replace('/href=\'/', sprintf('href=\'%s/', dirname(ST_SINC_TEAM_RANK_URL)), $body) ;
+            $body = preg_replace(
+                array(
+                    '/href=\'/',
+                    '/src=\'/'
+                ),
+                array(
+                    sprintf('href=\'%s/', dirname(ST_SINC_TEAM_RANK_URL)),
+                    sprintf('src=\'%s/', dirname(ST_SINC_TEAM_RANK_URL)),
+                ), $body) ;
         }
 
         $team_widget = sprintf('<div style="height:92px;width:200px;margin-top:5px;"><style>%s</style>%s</div>', $style, $body) ;
+
+        //  Output the widget content
+
+        echo $before_widget ;
+
+        $title = apply_filters('widget_title', $instance['title']) ;
+
+        if (!empty($title))
+        {
+            echo $before_title . $title . $after_title ;
+        }
 
         echo $team_widget ;
         echo $after_widget ;
