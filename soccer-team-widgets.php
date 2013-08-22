@@ -884,7 +884,6 @@ class SoccerTeamPlayerProfileWidget extends WP_Widget
      */
     function SoccerTeamPlayerProfileWidget()
     {
-        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
         $widget_ops = array(
             'classname' => 'st-featured-player-widget',
             'description' => 'Display a featured player profile.'
@@ -1050,7 +1049,6 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
      */
     function SoccerTeamSINCTeamRankWidget()
     {
-        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
         $widget_ops = array(
             'classname' => 'st-sinc-team-rank-widget',
             'description' => 'Display a team\'s SoccerInCollege(SINC) ranking.'
@@ -1129,7 +1127,6 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
         else
         {
             $data = &$response['body'] ;
-            //error_log(print_r($response, true)) ;
 
             //  Pull out the CSS
             $matchcount = preg_match_all('|<style[^>]*>(.*?)</style>|si',$data,$matches);
@@ -1149,10 +1146,6 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
             //  Pull out the body content
             $matchcount = preg_match_all('|<body[^>]*>(.*?)</body>|si', $data, $matches) ;
 
-            error_log('----------------------------') ;
-            //error_log(print_r($body, true)) ;
-            error_log('----------------------------') ;
-
             //  Did we find something?
             if ($matchcount > 0)
             {
@@ -1164,11 +1157,9 @@ class SoccerTeamSINCTeamRankWidget extends WP_Widget
             //  URLs correctly since they are relative in the source
 
             $body = preg_replace('/href=\'/', sprintf('href=\'%s/', dirname(ST_SINC_TEAM_RANK_URL)), $body) ;
-            error_log(print_r($body, true)) ;
-            error_log('----------------------------') ;
         }
 
-        $team_widget = sprintf('<div style="margin-top: 5px;"><style>%s</style>%s</div>', $style, $body) ;
+        $team_widget = sprintf('<div style="height:92px;width:200px;margin-top:5px;"><style>%s</style>%s</div>', $style, $body) ;
 
         echo $team_widget ;
         echo $after_widget ;
