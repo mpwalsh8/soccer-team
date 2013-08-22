@@ -607,7 +607,6 @@ add_action( 'quick_edit_custom_box', 'soccer_team_add_quick_edit_nonce', 10, 2 )
  */
 function soccer_team_add_quick_edit_nonce($column_name, $post_type)
 {
-    error_log(__LINE__) ;
     soccer_team_whereami(__FILE__, __LINE__) ;
     static $printNonce = true ;
 
@@ -679,7 +678,8 @@ function soccer_team_save_meta_box_data($post_id)
         foreach ($mb['fields'] as $field)
         {
             //if ($field['required'])
-            //{
+            if (array_key_exists($field['id'], $_POST))
+            {
                 //  Always update the Short URL Post Meta field
                 if (($field['id'] == '_' . ST_PREFIX . 'team_profile_short_url') ||
                     ($field['id'] == '_' . ST_PREFIX . 'player_profile_short_url'))
@@ -691,9 +691,6 @@ function soccer_team_save_meta_box_data($post_id)
 
                 elseif (isset($_POST[ST_PREFIX . 'meta_box_nonce']))
                 {
-                    error_log('+++++++++++++++++++++++') ;
-                    error_log(print_r($field['id'], true)) ;
-                    error_log('-----------------------') ;
                     $new = $_POST[$field['id']];
     
                     $old = get_post_meta($post_id, $field['id'], true) ;
@@ -707,9 +704,9 @@ function soccer_team_save_meta_box_data($post_id)
                         delete_post_meta($post_id, $field['id'], $old) ;
                     }
                 }
-                else
-                    error_log('bad nonce') ;
-            //}
+                //else
+                    //error_log('bad nonce') ;
+            }
             //else
                 //error_log(sprintf('Not Required:  %s', print_r($field, true))) ;
         }
