@@ -29,9 +29,10 @@ define('ST_SINC_TEAM_RANK_URL', 'http://soccerincollege.com/sicMyTeamInfo.aspx?i
 define('ST_SINC_TEAM_RANK_TRANSIENT', ST_PREFIX . '_sinc_team_rank_transient') ;
 define('ST_SINC_TEAM_RANK_TRANSIENT_EXPIRE', 1 * DAY_IN_SECONDS) ;
 
-/**  Output a Player's Profile Custom Fields */
+/**  Output a Team's Profile Custom Fields */
 function soccer_team_team_custom_fields($post_id, $mode = 'full')
 {
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     $brief = ($mode === 'brief') ;
 
     //  Need the plugin options to handle some of the fields
@@ -208,6 +209,7 @@ function soccer_team_team_custom_fields($post_id, $mode = 'full')
 /**  Output a Player's Profile Custom Fields */
 function soccer_team_player_custom_fields($post_id, $mode = 'full')
 {
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     $widget = ($mode === 'widget') ;
     $brief = ($mode === 'brief') || is_archive() ;
 

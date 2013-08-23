@@ -21,7 +21,7 @@ define('SOCCER_TEAM_PLUGIN_PATH',
     WP_PLUGIN_DIR . '/' .  dirname(plugin_basename(__FILE__))) ;
 
 //  Enable debug content?
-define('SOCCER_TEAM_DEBUG', true) ;
+define('SOCCER_TEAM_DEBUG', false) ;
 
 if (SOCCER_TEAM_DEBUG)
 {
@@ -466,24 +466,33 @@ function soccer_team_the_content_filter($content)
     //  If the content is for a Soccer Team CPT, then add the data
     if (in_array(get_post_type(), $cpt))
     {
-        //  Get custom fields
-        if (is_single())
-            $content = soccer_team_player_custom_fields(get_the_ID(), 'full') ;
-        else if (is_tax())
-            $content = soccer_team_player_custom_fields(get_the_ID(), 'brief') ;
-    }
+        if (get_post_type() == SOCCER_TEAM_CPT_PLAYER)
+        {
+            //  Get custom fields
+            if (is_single())
+                $content = soccer_team_player_custom_fields(get_the_ID(), 'full') ;
+            elseif (is_tax())
+                $content = soccer_team_player_custom_fields(get_the_ID(), 'brief') ;
+            else
+                $content = '' ;
+        }
 
-    /*
-    //  If the content is for a SOCCER_TEAM_CPT_TEAM CPT, then add the data
-    else if (get_post_type() == SOCCER_TEAM_CPT_TEAM)
-    {
-        //  Get custom fields
-        if (is_single())
-            $content = soccer_team_team_custom_fields(get_the_ID(), 'full') ;
-        else if (is_tax())
-            $content = soccer_team_team_custom_fields(get_the_ID(), 'brief') ;
+        //  If the content is for a SOCCER_TEAM_CPT_TEAM CPT, then add the data
+        elseif (get_post_type() == SOCCER_TEAM_CPT_TEAM)
+        {
+            //  Get custom fields
+            if (is_single())
+                $content = soccer_team_team_custom_fields(get_the_ID(), 'full') ;
+            elseif (is_tax())
+                $content = soccer_team_team_custom_fields(get_the_ID(), 'brief') ;
+            else
+                $content = '' ;
+        }
+        else
+        {
+            $content = '' ;
+        }
     }
-     */
 
     return $content ;
 }
