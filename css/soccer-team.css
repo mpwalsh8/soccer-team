@@ -18,7 +18,7 @@
 .st-players .st-player-position,
 .st-players .st-player-profile {
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 th.st-team-profile-attachment,
