@@ -7,7 +7,7 @@
  *
  * (c) 2011 by Mike Walsh
  *
- * @author Mike Walsh <mike@walshcrew.com>
+ * @author Mike Walsh <mpwalsh8@gmail.com>
  * @package Soccer-Team
  * @subpackage widgets
  * @version $Revision$
@@ -32,7 +32,6 @@ define('ST_SINC_TEAM_RANK_TRANSIENT_EXPIRE', 1 * DAY_IN_SECONDS) ;
 /**  Output a Team's Profile Custom Fields */
 function soccer_team_team_custom_fields($post_id, $mode = 'full')
 {
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     $brief = ($mode === 'brief') ;
 
     //  Need the plugin options to handle some of the fields
@@ -45,7 +44,7 @@ function soccer_team_team_custom_fields($post_id, $mode = 'full')
     //  Get the fields from the meta box definition
     $mb = soccer_team_team_profile_meta_box_content() ;
 
-    //  Need images in the event the team doesn't  have one.
+    //  Need images in the event the team doesn't have one.
 
     if ($brief)
         $smnia = plugins_url('images/NoPhotoAvailable150x100.png', __FILE__) ;
@@ -209,7 +208,6 @@ function soccer_team_team_custom_fields($post_id, $mode = 'full')
 /**  Output a Player's Profile Custom Fields */
 function soccer_team_player_custom_fields($post_id, $mode = 'full')
 {
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     $widget = ($mode === 'widget') ;
     $brief = ($mode === 'brief') || is_archive() ;
 
@@ -287,6 +285,26 @@ function soccer_team_player_custom_fields($post_id, $mode = 'full')
         $rosters = '&nbsp;' ;
     }
     
+    //  Get the status from the taxonomy
+    $terms = get_the_terms(get_the_ID(), SOCCER_TEAM_TAX_STATUS) ;
+
+    if ($terms && ! is_wp_error( $terms ))
+    {
+        $status = array();
+
+        foreach ( $terms as $term )
+        {
+            $status[] = '<a href="/' . SOCCER_TEAM_TAX_SLUG_STATUS . '/' . $term->slug .
+                '" title="' . sprintf('View Status:  %s', $term->name) .  '">' . $term->name . '</a>' ;
+        }
+		
+        $status = join( '<br/>', $status );
+    }
+    else
+    {
+        $status = '&nbsp;' ;
+    }
+    
     $jersey = '#' . get_post_meta(get_the_ID(), ST_PREFIX . 'player_jersey_number', true) ;
     $alt = &$jersey ;
 
@@ -330,6 +348,12 @@ function soccer_team_player_custom_fields($post_id, $mode = 'full')
         $output .= '<tr class="st-player-profile-row st-player-profile-row-roster">' . PHP_EOL ;
         $output .= '<th class="st-player-roster">Roster(s):</th>' . PHP_EOL ;
         $output .= '<td class="st-player-roster">' . $rosters . '</td>' . PHP_EOL ;
+        $output .= '</tr>' . PHP_EOL ;
+    
+        //  Status comes from the taxonomy
+        $output .= '<tr class="st-player-profile-row st-player-profile-row-status">' . PHP_EOL ;
+        $output .= '<th class="st-player-status">Status:</th>' . PHP_EOL ;
+        $output .= '<td class="st-player-status">' . $status . '</td>' . PHP_EOL ;
         $output .= '</tr>' . PHP_EOL ;
     
         //  Some content is marked "private" which means the current
@@ -405,19 +429,31 @@ function soccer_team_player_custom_fields($post_id, $mode = 'full')
                     //  Show the fields that aren't empty
                     if ($meta != '')
                     {
+                        $labels = array(
+                            ST_PREFIX . 'player_gs_profile' => 'Player GotSoccer Profile',
+                            ST_PREFIX . 'player_sic_profile' => 'Player SoccerInCollege Profile'
+                        ) ;
+
                         $fieldclass = substr($field['id'], strlen(ST_PREFIX)) ;
                         $fieldlabel = ucwords(str_replace(array('_'), ' ', $fieldclass)) ;
+
+                        //  Override label for GotSoccer and SINC profiles
+                        if (in_array($field['id'], array_keys($labels))) $fieldlabel = $labels[$field['id']] ;
+
+                        //  Clean up labels, excessive use of "player" doesn't make sense
+                        $fieldlabel = preg_replace('/^Player /', '', $fieldlabel) ;
+
                         $output .= '<tr class="st-player-profile-row roster-player-profile-row-' . $fieldclass . '">' . PHP_EOL ;
                         $output .= '<th class="st-player-' . $fieldclass . '">' . $fieldlabel . ':</th>' . PHP_EOL ;
                         $output .= '<td class="st-player-' . $fieldclass . '">' ;
                
                         switch ($field['id'])
                         {
-                            case ST_PREFIX . 'gs_profile' :
-                            case ST_PREFIX . 'sic_profile' :
+                            case ST_PREFIX . 'player_gs_profile' :
+                            case ST_PREFIX . 'player_sic_profile' :
                                 $thickbox =  '&KeepThis=true&TB_iframe=true&height=800&width=1024' ;
                                     $output .= '<a class="thickbox" title="' . $field['desc'] . '" href="' .
-                                        $meta . $thickbox . '">Click to view ' . $field['name'] . '.</a>' ;
+                                        $meta . $thickbox . '">View ' . $field['name'] . '</a>' ;
                                 break ;
                             case ST_PREFIX . 'player_qr_code' ;
                                 if (strtolower($meta) === 'on')
@@ -587,7 +623,8 @@ function soccer_team_players_roster_shortcode($orderbyname = false)
             //  Display the Player's Name (title field)
             $output .= the_title(
                 '<td class="st-player-name"><a href="' . get_permalink() . '">',
-                '</a></td>' . PHP_EOL, false
+                '</a><br/><small>(' . ucwords(get_post_meta( get_the_ID(), ST_PREFIX .
+                'player_status', true)) . ')</small></td>' . PHP_EOL, false
             ) ;
 
             //  Output Position(s)

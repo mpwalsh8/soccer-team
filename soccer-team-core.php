@@ -7,7 +7,7 @@
  *
  * (c) 2011 by Mike Walsh
  *
- * @author Mike Walsh <mike@walshcrew.com>
+ * @author Mike Walsh <mpwalsh8@gmail.com>
  * @package Soccer-Team
  * @subpackage functions
  * @version $Revision$
