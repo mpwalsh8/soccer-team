@@ -6,7 +6,7 @@
  *
  * (c) 2011 by Mike Walsh
  *
- * @author Mike Walsh <mike@walshcrew.com>
+ * @author Mike Walsh <mpwalsh8@gmail.com>
  * @package Soccer-Team
  * @subpackage post-types
  * @version $Revision$
@@ -25,7 +25,7 @@ define('SOCCER_TEAM_CPT_PLAYER', 'player') ;
 define('SOCCER_TEAM_CPT_QV_PLAYER', SOCCER_TEAM_CPT_PLAYER . '_qv') ;
 define('SOCCER_TEAM_CPT_SLUG_PLAYER', SOCCER_TEAM_CPT_PLAYER . 's') ;
 
-// Soccer Team Plugin 'Player' Taxonpmy
+// Soccer Team Plugin 'Position' Taxonpmy
 define('SOCCER_TEAM_TAX_POSITION', 'position') ;
 define('SOCCER_TEAM_TAX_QV_POSITION', SOCCER_TEAM_TAX_POSITION . '_qv') ;
 define('SOCCER_TEAM_TAX_SLUG_POSITION', SOCCER_TEAM_TAX_POSITION . 's') ;
@@ -34,6 +34,11 @@ define('SOCCER_TEAM_TAX_SLUG_POSITION', SOCCER_TEAM_TAX_POSITION . 's') ;
 define('SOCCER_TEAM_TAX_ROSTER', 'roster') ;
 define('SOCCER_TEAM_TAX_QV_ROSTER', SOCCER_TEAM_TAX_ROSTER . '_qv') ;
 define('SOCCER_TEAM_TAX_SLUG_ROSTER', SOCCER_TEAM_TAX_ROSTER . 's') ;
+
+// Soccer Team Plugin 'Status' Taxonpmy
+define('SOCCER_TEAM_TAX_STATUS', 'status') ;
+define('SOCCER_TEAM_TAX_QV_STATUS', SOCCER_TEAM_TAX_STATUS . '_qv') ;
+define('SOCCER_TEAM_TAX_SLUG_STATUS', SOCCER_TEAM_TAX_STATUS . 's') ;
 
 // Google's "goo.gl" Short URL API
 define('SOCCER_TEAM_GOOGL_API', 'https://www.googleapis.com/urlshortener/v1/url') ;
@@ -61,16 +66,16 @@ function soccer_team_register_post_types()
             'exceprt'
         ),
         'labels' => array(
-            'name' => 'Soccer Teams',
-            'singular_name' => 'Soccer Team',
-            'add_new' => 'Add New Soccer Team',
-            'add_new_item' => 'Add New Soccer Team',
-            'edit_item' => 'Edit Soccer Team',
-            'new_item' => 'New Soccer Team',
-            'view_item' => 'View Soccer Team',
-            'search_items' => 'Search Soccer Teams',
-            'not_found' => 'No Soccer Teams Found',
-            'not_found_in_trash' => 'No Soccer Teams Found In Trash'
+            'name' => __('Soccer Teams', ST_I18N_DOMAIN),
+            'singular_name' => __('Soccer Team', ST_I18N_DOMAIN),
+            'add_new' => __('Add New Soccer Team', ST_I18N_DOMAIN),
+            'add_new_item' => __('Add New Soccer Team', ST_I18N_DOMAIN),
+            'edit_item' => __('Edit Soccer Team', ST_I18N_DOMAIN),
+            'new_item' => __('New Soccer Team', ST_I18N_DOMAIN),
+            'view_item' => __('View Soccer Team', ST_I18N_DOMAIN),
+            'search_items' => __('Search Soccer Teams', ST_I18N_DOMAIN),
+            'not_found' => __('No Soccer Teams Found', ST_I18N_DOMAIN),
+            'not_found_in_trash' => __('No Soccer Teams Found In Trash', ST_I18N_DOMAIN),
         ),
         'menu_icon' => plugins_url('/images/DashboardMenu.png', __FILE__)
     );
@@ -94,16 +99,16 @@ function soccer_team_register_post_types()
             'exceprt'
         ),
         'labels' => array(
-            'name' => 'Soccer Players',
-            'singular_name' => 'Soccer Player',
-            'add_new' => 'Add New Soccer Player',
-            'add_new_item' => 'Add New Soccer Player',
-            'edit_item' => 'Edit Soccer Player',
-            'new_item' => 'New Soccer Player',
-            'view_item' => 'View Soccer Player',
-            'search_items' => 'Search Soccer Players',
-            'not_found' => 'No Soccer Players Found',
-            'not_found_in_trash' => 'No Soccer Players Found In Trash'
+            'name' => __('Soccer Players', ST_I18N_DOMAIN),
+            'singular_name' => __('Soccer Player', ST_I18N_DOMAIN),
+            'add_new' => __('Add New Soccer Player', ST_I18N_DOMAIN),
+            'add_new_item' => __('Add New Soccer Player', ST_I18N_DOMAIN),
+            'edit_item' => __('Edit Soccer Player', ST_I18N_DOMAIN),
+            'new_item' => __('New Soccer Player', ST_I18N_DOMAIN),
+            'view_item' => __('View Soccer Player', ST_I18N_DOMAIN),
+            'search_items' => __('Search Soccer Players', ST_I18N_DOMAIN),
+            'not_found' => __('No Soccer Players Found', ST_I18N_DOMAIN),
+            'not_found_in_trash' => __('No Soccer Players Found In Trash', ST_I18N_DOMAIN),
         ),
         'menu_icon' => plugins_url('/images/DashboardMenu.png', __FILE__)
     );
@@ -115,7 +120,7 @@ function soccer_team_register_post_types()
 /** Register taxonomies */
 function soccer_team_register_taxonomies()
 {
-    /** Set up the arguments for the 'position' post type. */
+    /** Set up the arguments for the 'position' taxonomy. */
     $position_args = array(
         'hierarchical' => true,
         'query_var' => SOCCER_TEAM_TAX_QV_POSITION,
@@ -126,23 +131,23 @@ function soccer_team_register_taxonomies()
             'hierarchical' => true,
         ),
         'labels' => array(
-            'name' => 'Positions',
-            'singular_name' => 'Position',
-            'edit_item' => 'Edit Position',
-            'update_item' => 'Update Position',
-            'add_new_item' => 'Add New Position',
-            'new_item_name' => 'New Position Name',
-            'all_items' => 'All Positions',
-            'search_items' => 'Search Positions',
-            'parent_item' => 'Parent Position',
-            'parent_item_colon' => 'Parent Position:',
+            'name' => __('Positions', ST_I18N_DOMAIN),
+            'singular_name' => __('Position', ST_I18N_DOMAIN),
+            'edit_item' => __('Edit Position', ST_I18N_DOMAIN),
+            'update_item' => __('Update Position', ST_I18N_DOMAIN),
+            'add_new_item' => __('Add New Position', ST_I18N_DOMAIN),
+            'new_item_name' => __('New Position Name', ST_I18N_DOMAIN),
+            'all_items' => __('All Positions', ST_I18N_DOMAIN),
+            'search_items' => __('Search Positions', ST_I18N_DOMAIN),
+            'parent_item' => __('Parent Position', ST_I18N_DOMAIN),
+            'parent_item_colon' => __('Parent Position:', ST_I18N_DOMAIN),
         ),
     );
 
-    // Register the soccer_team player post type
+    // Register the soccer_team position taxonomy
     register_taxonomy(SOCCER_TEAM_TAX_POSITION, array(SOCCER_TEAM_CPT_PLAYER), $position_args) ;
 
-    /** Set up the arguments for the 'roster' post type. */
+    /** Set up the arguments for the 'roster' taxonomy. */
     $roster_args = array(
         'hierarchical' => true,
         'query_var' => SOCCER_TEAM_TAX_QV_ROSTER,
@@ -153,21 +158,90 @@ function soccer_team_register_taxonomies()
             'hierarchical' => true,
         ),
         'labels' => array(
-            'name' => 'Rosters',
-            'singular_name' => 'Roster',
-            'edit_item' => 'Edit Roster',
-            'update_item' => 'Update Roster',
-            'add_new_item' => 'Add New Roster',
-            'new_item_name' => 'New Roster Name',
-            'all_items' => 'All Rosters',
-            'search_items' => 'Search Rosters',
-            'parent_item' => 'Parent Roster',
-            'parent_item_colon' => 'Parent Roster:',
+            'name' => __('Rosters', ST_I18N_DOMAIN),
+            'singular_name' => __('Roster', ST_I18N_DOMAIN),
+            'edit_item' => __('Edit Roster', ST_I18N_DOMAIN),
+            'update_item' => __('Update Roster', ST_I18N_DOMAIN),
+            'add_new_item' => __('Add New Roster', ST_I18N_DOMAIN),
+            'new_item_name' => __('New Roster Name', ST_I18N_DOMAIN),
+            'all_items' => __('All Rosters', ST_I18N_DOMAIN),
+            'search_items' => __('Search Rosters', ST_I18N_DOMAIN),
+            'parent_item' => __('Parent Roster', ST_I18N_DOMAIN),
+            'parent_item_colon' => __('Parent Roster:', ST_I18N_DOMAIN),
         ),
     );
 
-    // Register the soccer_team team post type
+    // Register the soccer_team roster taxonomy
     register_taxonomy(SOCCER_TEAM_TAX_ROSTER, array(SOCCER_TEAM_CPT_TEAM, SOCCER_TEAM_CPT_PLAYER), $roster_args) ;
+
+    /** Set up the arguments for the 'status' taxonomy. */
+    $status_args = array(
+        'hierarchical' => true,
+        'query_var' => SOCCER_TEAM_TAX_QV_STATUS,
+        'show_tagcloud' => true,
+        'rewrite' => array(
+            'slug' => SOCCER_TEAM_TAX_SLUG_STATUS,
+            'with_front' => false,
+            'hierarchical' => true,
+        ),
+        'labels' => array(
+            'name' => __('Status', ST_I18N_DOMAIN),
+            'singular_name' => __('Status', ST_I18N_DOMAIN),
+            'edit_item' => __('Edit Status', ST_I18N_DOMAIN),
+            'update_item' => __('Update Status', ST_I18N_DOMAIN),
+            'add_new_item' => __('Add New Status', ST_I18N_DOMAIN),
+            'new_item_name' => __('New Status Name', ST_I18N_DOMAIN),
+            'all_items' => __('All Status', ST_I18N_DOMAIN),
+            'search_items' => __('Search Status', ST_I18N_DOMAIN),
+            'parent_item' => __('Parent Status', ST_I18N_DOMAIN),
+            'parent_item_colon' => __('Parent Status:', ST_I18N_DOMAIN),
+        ),
+    );
+
+    // Register the soccer_team status taxonomy
+    register_taxonomy(SOCCER_TEAM_TAX_STATUS, array(SOCCER_TEAM_CPT_TEAM, SOCCER_TEAM_CPT_PLAYER), $status_args) ;
+
+    //  Initilize status taxonomy if it is empty
+
+    $terms = get_terms(SOCCER_TEAM_TAX_STATUS, array('get' => 'all')) ;
+
+    if (empty($terms))
+    {
+        $terms = array(
+            'active' => __('Active', ST_I18N_DOMAIN),
+            'guest' => __('Guest', ST_I18N_DOMAIN),
+            'inactive' => __('Inactive', ST_I18N_DOMAIN)
+        )  ;
+        $args = array('parent' => 0, 'taxonomy' => SOCCER_TEAM_TAX_STATUS, 'description' => '') ;
+
+        foreach ($terms as $term)
+        {
+            $args['description'] = $term ;
+            wp_insert_term($term, SOCCER_TEAM_TAX_STATUS, $args) ;
+        }
+    }
+
+    //  Initilize position taxonomy if it is empty
+
+    $terms = get_terms(SOCCER_TEAM_TAX_POSITION, array('get' => 'all')) ;
+
+    if (empty($terms))
+    {
+        $terms = array('Forward', 'Defender', 'Midfielder', 'Goal Keeper')  ;
+        $terms = array(
+            'forward' => __('Forward', ST_I18N_DOMAIN),
+            'defender' => __('Defender', ST_I18N_DOMAIN),
+            'midfielder' => __('Midfielder', ST_I18N_DOMAIN),
+            'goalkeeper' => __('Goal Keeper', ST_I18N_DOMAIN)
+        )  ;
+        $args = array('parent' => 0, 'taxonomy' => SOCCER_TEAM_TAX_POSITION, 'description' => '') ;
+
+        foreach ($terms as $term)
+        {
+            $args['description'] = $term ;
+            wp_insert_term($term, SOCCER_TEAM_TAX_POSITION, $args) ;
+        }
+    }
 }
 
 /** Set up the post type image size(s) */
@@ -330,14 +404,16 @@ function soccer_team_player_profile_meta_box_content()
                 'options' => array('Public', 'Private'),
                 'required' => true
             ),
+            /*
             array(
                 'name' => 'Status',
                 'desc' => 'Player Status',
                 'id' => ST_PREFIX . 'player_status',
                 'type' => 'select',
-                'options' => array('Active', 'Inactive'),
+                'options' => array('Active', 'Guest', 'Inactive'),
                 'required' => true
             ),
+             */
             array(
                 'name' => 'Got Soccer Profile',
                 'desc' => 'Player\'s Got-Soccer.com Profile URL',
@@ -481,6 +557,7 @@ function soccer_team_team_profile_meta_box_content()
                 'options' => array('Public', 'Private'),
                 'required' => true
             ),
+            /*
             array(
                 'name' => 'Status',
                 'desc' => 'Team Status',
@@ -489,6 +566,7 @@ function soccer_team_team_profile_meta_box_content()
                 'options' => array('Active', 'Inactive'),
                 'required' => true
             ),
+             */
             array(
                 'name' => 'Team Profile Short URL',
                 'desc' => 'Team\'s Profile Short URL',
@@ -607,7 +685,7 @@ add_action( 'quick_edit_custom_box', 'soccer_team_add_quick_edit_nonce', 10, 2 )
  */
 function soccer_team_add_quick_edit_nonce($column_name, $post_type)
 {
-    soccer_team_whereami(__FILE__, __LINE__) ;
+    //soccer_team_whereami(__FILE__, __LINE__) ;
     static $printNonce = true ;
 
     if (($post_type == SOCCER_TEAM_CPT_TEAM) || ($post_type == SOCCER_TEAM_CPT_PLAYER))
@@ -923,6 +1001,7 @@ function soccer_team_add_new_player_columns($cols)
             ST_PREFIX . 'player_jersey_number' => __('Jersey Number'),
             ST_PREFIX . 'position' => __('Position(s)'),
             ST_PREFIX . 'roster' => __('Roster(s)'),
+            ST_PREFIX . 'status' => __('Status'),
             //'id' => __(ID)
         ),
         array_slice($cols, 2)
@@ -936,12 +1015,22 @@ function soccer_team_player_custom_columns($column, $post_id)
 {
     switch ($column)
     {
+        /*
+        case ST_PREFIX . 'player_status':
+            echo ucwords(get_post_meta( $post_id, ST_PREFIX . 'player_status', true)) ;
+            break;
+         */
+
         case ST_PREFIX . 'player_jersey_number':
             echo get_post_meta( $post_id, ST_PREFIX . 'player_jersey_number', true) ;
             break;
 
+        case ST_PREFIX . 'status':
         case ST_PREFIX . 'roster':
         case ST_PREFIX . 'position':
+            if ($column == ST_PREFIX . 'status')
+                $terms = get_the_terms(get_the_ID(), SOCCER_TEAM_TAX_STATUS) ;
+
             if ($column == ST_PREFIX . 'roster')
                 $terms = get_the_terms(get_the_ID(), SOCCER_TEAM_TAX_ROSTER) ;
 
@@ -981,6 +1070,7 @@ function soccer_team_player_sortable_columns()
     return array(
         'title' => 'title',
         ST_PREFIX . 'player_jersey_number' => 'player_jersey_number',
+        ST_PREFIX . 'status' => 'status',
     ) ;
 }
 
