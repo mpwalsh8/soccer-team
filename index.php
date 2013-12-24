@@ -24,7 +24,7 @@
  *
  */
 
-define('ST_VERSION', '0.6-beta-4') ;
+define('ST_VERSION', '0.7-beta-1') ;
 define('ST_PREFIX', 'soccer_team_') ;
 
 require('soccer-team-core.php') ;
@@ -32,6 +32,22 @@ require('soccer-team-post-type.php') ;
 //require('soccer-team-menus.php') ;
 require('soccer-team-widgets.php') ;
 
+// i18n plugin domain
+define( 'ST_I18N_DOMAIN', 'soccer_team' );
+
+/**
+ * Initialise the internationalisation domain
+ */
+$is_soccer_team_i18n_setup = false ;
+function soccer_team_init_i18n()
+{
+	global $is_soccer_team_i18n_setup;
+
+	if ($is_soccer_team_i18n_setup == false) {
+		load_plugin_textdomain(ST_I18N_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages/') ;
+		$is_soccer_team_i18n_setup = true;
+	}
+}
 
 // Use the register_activation_hook to set default values
 register_activation_hook(__FILE__, 'soccer_team_register_activation_hook');
